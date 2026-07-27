@@ -1,0 +1,88 @@
+{
+  "0": {
+    "Text": "A long, long time ago, Gunia-kanapunia sat on the floor...",
+    "Backgrounds": ["intro1.png"],
+    "FadeTime": 2.5,
+    "MusicFile": "untitled-p1.mp3",
+    "NarrationFile":"narr1b.mp3",
+    "OnEnter": [
+      { "Type": "Sound", "Param": "vscode1-typewriter2.wav" }
+    ],
+    "Choices": [
+      { "Text": "Open the door", "TargetID": 1 },
+      { "Text": "Stay in the hallway", "TargetID": 2 }
+    ],
+    "Particles": "Snow"
+
+  },
+
+  "1": {
+    "Text": "Something crashes in the kitchen!",
+    "Backgrounds": ["intro1.png"],
+    "FadeTime": 0.9,
+    "NarrationFile":"narr2.mp3",
+    "OnEnter": [
+      { "Type": "Shake", "Value": 10.0 },
+      { "Type": "Sanity", "Value": -1 },
+      { "Type": "Sound", "Param": "vscode1-typewriter2.wav" }    
+              ],      
+    "NextStep": 2   ,
+    "Particles": "Dust"  
+  },
+    
+  "2": {
+    "Text": "I really like potatoes!",
+    "Backgrounds": ["oldman1-p2.png"],
+    "FadeTime": 0.9,
+    "NarrationFile":"nar3-edit2.mp3",
+    "OnEnter": [
+      { "Type": "Sound", "Param": "vscode1-typewriter2.wav" }],
+    "NextStep": 3   ,
+    "Particles": "Sparks"
+  },
+    
+  "3": {
+    "Text": "The old study feels cold. A strange noise comes from the clock above the fire.",
+    "Backgrounds": ["oldman1-p2.png"],
+    "FadeTime": 0.9,
+    "HitMapFile": "oldman1-p2-map1red.png",
+    "OnEnter": [
+      { "Type": "Sound", "Param": "vscode1-typewriter2.wav" }
+    ],
+  "Interactions": [
+      {
+        "R": 255, "G": 0, "B": 0,
+        "TargetID": 4,
+        "HighlightFiles": ["oldman1-p2-select.png"],
+         "Name":"Old Clock"
+      }           ],
+      "Particles": "Rain"
+  },
+    
+  "4": {
+    "Text": "frame4",
+    "Backgrounds": ["oldman1-p2.png"],
+    "FadeTime": 0.9,
+    "NarrationFile":"nar3-edit2.mp3",
+    "OnEnter": [
+      { "Type": "Sound", "Param": "vscode1-typewriter2.wav" }
+    ]
+  ,"NextStep": 5
+  },
+    
+  "5": {
+    "Text": "frame3",
+    "Backgrounds": ["oldman1-p2.png"],
+    "FadeTime": 0.9,
+    "NarrationFile":"nar3-edit2.mp3",
+    "OnEnter": [
+      { "Type": "Sound", "Param": "vscode1-typewriter2.wav" }
+    ]
+     ,"NextStep": 1
+  }
+
+
+
+
+
+}
