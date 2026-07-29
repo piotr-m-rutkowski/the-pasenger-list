@@ -6,7 +6,6 @@ using Raylib_cs;
 using Newtonsoft.Json;
 
 
-
 public class StoryManager
 {
     public Image CurrentHitMap;
@@ -32,11 +31,11 @@ public class StoryManager
     private bool _isNarrationPlaying = false;    
     public Dictionary<int, List<Texture2D>> InteractionTextures = new();
 
-    public StoryManager(string jsonPath, int startID)
+    public StoryManager(string jsonPath, int startID, bool playAudioOnStart = false)
     {
         string json = File.ReadAllText(jsonPath);
         StoryMap = JsonConvert.DeserializeObject<Dictionary<int, Scene>>(json);
-        LoadScene(startID);
+        LoadScene(startID, playAudioOnStart);
     }
 
     public void LoadScene(int id, bool playAudio = true)
@@ -92,23 +91,45 @@ public class StoryManager
         Raylib.SetTextureFilter(CurrentBGFrames[i], TextureFilter.Bilinear);
     }
 
-    // Audio Handling
-    if (!string.IsNullOrEmpty(CurrentScene.NarrationFile)) {
-        _currentNarration = Raylib.LoadSound("assets/narration/" + CurrentScene.NarrationFile);
-        Raylib.PlaySound(_currentNarration);
-        _isNarrationPlaying = true;
-    }
-    HandleMusic(CurrentScene.MusicFile);
+    // --- 3. Audio Handling ---
+    if (playAudio)
+            {
+                if (!string.IsNullOrEmpty(CurrentScene.NarrationFile)) 
+                {
+                    // Check both possible folders (assets/narration or assets/audio)
+                    string narrationPath = Path.Combine("assets", "narration", CurrentScene.NarrationFile);
+                    if (!File.Exists(narrationPath))
+                    {
+                        narrationPath = Path.Combine("assets", "audio", CurrentScene.NarrationFile);
+                    }
+
+                    if (File.Exists(narrationPath))
+                    {
+                        _currentNarration = Raylib.LoadSound(narrationPath);
+                        Raylib.PlaySound(_currentNarration);
+                        _isNarrationPlaying = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"[Audio Warning] Narration file missing: {CurrentScene.NarrationFile}");
+                    }
+                }
+
+                HandleMusic(CurrentScene.MusicFile);
+            }
 
     // --- 3. Actions & Effects ---
     
-    if (CurrentScene.OnEnter != null) {
-        foreach (var action in CurrentScene.OnEnter) {
-            if (action.Type == "Shake") ShakeIntensity = action.Value;
-            if (action.Type == "Sanity") Sanity += (int)action.Value;
-            if (action.Type == "Sound") Raylib.PlaySound(Raylib.LoadSound("assets/audio/" + action.Param));
+if (CurrentScene.OnEnter != null) {
+            foreach (var action in CurrentScene.OnEnter) {
+                if (action.Type == "Shake") ShakeIntensity = action.Value;
+                if (action.Type == "Sanity") Sanity += (int)action.Value;
+                if (action.Type == "Sound" && playAudio) 
+                {
+                    Raylib.PlaySound(Raylib.LoadSound("assets/audio/" + action.Param));
+                }
+            }
         }
-    }
 
     // --- 4. Loading the NEW HitMap ---
     
@@ -130,35 +151,34 @@ public class StoryManager
 
     // --- 5. Loading Highlights ---
     
-    if (CurrentScene.Interactions != null)
-    {
-        foreach (var act in CurrentScene.Interactions)
+if (CurrentScene.Interactions != null)
         {
-            List<Texture2D> frames = new List<Texture2D>();
-            
-            if (act.HighlightFiles != null && act.HighlightFiles.Count > 0) 
+            foreach (var act in CurrentScene.Interactions)
             {
-                foreach (var file in act.HighlightFiles)
+                List<Texture2D> frames = new List<Texture2D>();
+                
+                if (act.HighlightFiles != null && act.HighlightFiles.Count > 0) 
                 {
-                    frames.Add(Raylib.LoadTexture("assets/highlights/" + file));
+                    foreach (var file in act.HighlightFiles)
+                    {
+                        frames.Add(Raylib.LoadTexture("assets/highlights/" + file));
+                    }
                 }
-            }
-            else if (!string.IsNullOrEmpty(act.HighlightFile))
-            {
-                frames.Add(Raylib.LoadTexture("assets/highlights/" + act.HighlightFile));
-            }
+                else if (!string.IsNullOrEmpty(act.HighlightFile))
+                {
+                    frames.Add(Raylib.LoadTexture("assets/highlights/" + act.HighlightFile));
+                }
 
-            InteractionTextures.Add(act.TargetID, frames);
+                InteractionTextures.Add(act.TargetID, frames);
+            }
         }
-   // Audio Cleanup
-    if (_isNarrationPlaying) 
-    {
-        Raylib.StopSound(_currentNarration);
-        Raylib.UnloadSound(_currentNarration);
-        _isNarrationPlaying = false;
     }
 
-    CurrentScene = StoryMap[id];
+
+
+
+
+   /* CurrentScene = StoryMap[id];
 
     // --- ONLY LOAD NARRATION IF playAudio IS TRUE ---
     if (playAudio && !string.IsNullOrEmpty(CurrentScene.NarrationFile))
@@ -172,7 +192,7 @@ public class StoryManager
             _isNarrationPlaying = true;
         }
     }}
-}
+}*/
 
     private void HandleMusic(string path) {
         if (!string.IsNullOrEmpty(path) && path != _currentMusicPath) {

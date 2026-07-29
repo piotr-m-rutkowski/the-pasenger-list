@@ -31,7 +31,7 @@ static GameState currentGameState = GameState.Menu;
         Raylib.SetSoundVolume(typeSound, 0.05f);
         
         RenderTexture2D canvas = Raylib.LoadRenderTexture(vW, vH);
-        StoryManager story = new StoryManager("story.json", 0);
+        StoryManager story = new StoryManager("story.json", 0,playAudioOnStart: false);
         int frames = 0;
         ParticleSystem dustMotes = new ParticleSystem(800);
         Raylib.SetExitKey(KeyboardKey.Null);

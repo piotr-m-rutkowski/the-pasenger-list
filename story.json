@@ -1,5 +1,20 @@
 {
-  "0": {
+    "0": {
+    "Text": "zero",
+    "Backgrounds": ["gabihailmary.png"],
+    "FadeTime": 2.5,
+    "MusicFile": "untitled-p1.mp3",
+    "OnEnter": [
+      { "Type": "Sound", "Param": "vscode1-typewriter2.wav" }
+    ],
+    "Choices": [
+      { "Text": "Open the door", "TargetID": 1 },
+      { "Text": "Stay in the hallway", "TargetID": 2 }
+    ],
+    "Particles": "Snow"
+
+  },
+  "1": {
     "Text": "A long, long time ago, Gunia-kanapunia sat on the floor...",
     "Backgrounds": ["intro1.png"],
     "FadeTime": 2.5,
@@ -16,10 +31,12 @@
 
   },
 
-  "1": {
+  
+  "2": {
     "Text": "Something crashes in the kitchen!",
     "Backgrounds": ["intro1.png"],
     "FadeTime": 0.9,
+    "MusicFile": "untitled-p1.mp3",
     "NarrationFile":"narr2.mp3",
     "OnEnter": [
       { "Type": "Shake", "Value": 10.0 },
@@ -30,7 +47,7 @@
     "Particles": "Dust"  
   },
     
-  "2": {
+  "3": {
     "Text": "I really like potatoes!",
     "Backgrounds": ["oldman1-p2.png"],
     "FadeTime": 0.9,
@@ -41,7 +58,7 @@
     "Particles": "Sparks"
   },
     
-  "3": {
+  "4": {
     "Text": "The old study feels cold. A strange noise comes from the clock above the fire.",
     "Backgrounds": ["oldman1-p2.png"],
     "FadeTime": 0.9,
@@ -56,10 +73,10 @@
         "HighlightFiles": ["oldman1-p2-select.png"],
          "Name":"Old Clock"
       }           ],
-      "Particles": "Rain"
+      "Particles": "fRain"
   },
     
-  "4": {
+  "5": {
     "Text": "frame4",
     "Backgrounds": ["oldman1-p2.png"],
     "FadeTime": 0.9,
@@ -70,7 +87,7 @@
   ,"NextStep": 5
   },
     
-  "5": {
+  "6": {
     "Text": "frame3",
     "Backgrounds": ["oldman1-p2.png"],
     "FadeTime": 0.9,
@@ -80,6 +97,10 @@
     ]
      ,"NextStep": 1
   }
+
+
+
+
 
 
 
