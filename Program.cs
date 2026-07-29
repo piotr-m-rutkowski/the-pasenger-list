@@ -20,6 +20,13 @@ static GameState currentGameState = GameState.Menu;
         Raylib.SetTargetFPS(60);
         Raylib.InitAudioDevice();
 
+        // Create your AudioManager instance here:
+    AudioManager audio = new AudioManager();
+
+    // Load your ambient audio tracks (update file paths as needed)
+    audio.LoadAmbient("Rain", "assets/audio/wind_loop - Copy.wav");
+    audio.LoadAmbient("Wind", "assets/audio/wind_loop.wav");
+
         Sound typeSound = Raylib.LoadSound("assets/audio/vscode1-typewriter2.wav");
         Raylib.SetSoundVolume(typeSound, 0.05f);
         
@@ -56,6 +63,8 @@ if (Raylib.IsKeyPressed(KeyboardKey.Escape))
     switch (currentGameState)
     {
 case GameState.Menu:
+    audio.StopAmbient();
+    audio.StopNarration(); // Stop any leftover narration    
     Rectangle startButton = new Rectangle(vW / 2 - 150, vH / 2, 300, 80);
     Rectangle quitButton = new Rectangle(vW / 2 - 150, vH / 2 + 100, 300, 80);
 
@@ -93,8 +102,31 @@ case GameState.Menu:
                 if (story.CurrentScene != null) 
                     dustMotes.UpdateSceneParticles(story.CurrentScene.Particles);
 
-                // --- HITMAP DETECTION ---
-                //int hoveredTarget = -1;
+        // =========================================================
+        // --- AUDIO SCENE MANAGEMENT ---
+        // =========================================================
+        if (story.CurrentScene != null) 
+        {
+            string particleType = story.CurrentScene.Particles;
+
+            if (particleType == "Rain")
+            {
+                audio.PlayAmbient("Rain", 0.4f);
+            }
+            else if (particleType == "Wind")
+            {
+                audio.PlayAmbient("Wind", 0.3f);
+            }
+            else
+            {
+                audio.StopAmbient(); // Stop weather audio on silent scenes
+            }
+        }
+        // =========================================================
+
+        // =========================================================
+        // --- HITMAP DETECTION ---
+        //int hoveredTarget = -1;
                 bool textFinished = story.CurrentScene != null && story.DisplayedText.Length >= story.CurrentScene.Text.Length;
 
                 if (textFinished && story.CurrentScene != null && story.CurrentHitMap.Width > 0)
@@ -118,7 +150,7 @@ case GameState.Menu:
                                     {
                                         story.AddToHistory(story.CurrentScene.Text); 
                                         story.AddToHistory($"Interacted with: {interaction.Name}");
-                                        story.LoadScene(interaction.TargetID);
+                                        story.LoadScene(interaction.TargetID,true);
                                     }
                                     break; 
                                 }
@@ -150,7 +182,7 @@ case GameState.Menu:
                         if (!hasChoices && !hasInteractions)
                         {
                             story.AddToHistory(story.CurrentScene.Text); 
-                            story.LoadScene(story.CurrentScene.NextStep);
+                            story.LoadScene(story.CurrentScene.NextStep, true);
                         }
                     }
                 }
@@ -217,7 +249,7 @@ case GameState.Menu:
                             
                                 {   story.AddToHistory(story.CurrentScene.Text); 
                                     story.AddToHistory($"Selected: {choice.Text}");
-                                    story.LoadScene(choice.TargetID);
+                                    story.LoadScene(choice.TargetID, true);
                                 }
                         }
                     }

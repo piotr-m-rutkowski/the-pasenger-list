@@ -39,7 +39,7 @@ public class StoryManager
         LoadScene(startID);
     }
 
-    public void LoadScene(int id)
+    public void LoadScene(int id, bool playAudio = true)
 {
     if (!StoryMap.ContainsKey(id)) return;
 
@@ -150,7 +150,28 @@ public class StoryManager
 
             InteractionTextures.Add(act.TargetID, frames);
         }
+   // Audio Cleanup
+    if (_isNarrationPlaying) 
+    {
+        Raylib.StopSound(_currentNarration);
+        Raylib.UnloadSound(_currentNarration);
+        _isNarrationPlaying = false;
     }
+
+    CurrentScene = StoryMap[id];
+
+    // --- ONLY LOAD NARRATION IF playAudio IS TRUE ---
+    if (playAudio && !string.IsNullOrEmpty(CurrentScene.NarrationFile))
+    {
+        string audioPath = Path.Combine("assets", "audio", CurrentScene.NarrationFile);
+        
+        if (File.Exists(audioPath))
+        {
+            _currentNarration = Raylib.LoadSound(audioPath);
+            Raylib.PlaySound(_currentNarration);
+            _isNarrationPlaying = true;
+        }
+    }}
 }
 
     private void HandleMusic(string path) {
