@@ -203,6 +203,32 @@ if (CurrentScene.Interactions != null)
         }
     }
 
+public void StopNarration()
+{
+    if (_isNarrationPlaying)
+    {
+        Raylib.StopSound(_currentNarration);
+        Raylib.UnloadSound(_currentNarration);
+        _isNarrationPlaying = false;
+    }
+}
+
+public void PauseNarration()
+{
+    if (_isNarrationPlaying && Raylib.IsSoundPlaying(_currentNarration))
+    {
+        Raylib.PauseSound(_currentNarration);
+    }
+}
+
+public void ResumeNarration()
+{
+    if (_isNarrationPlaying)
+    {
+        Raylib.ResumeSound(_currentNarration);
+    }
+}
+
     public void Update(float dt) {
         // Fade & Shake logic
         if (FadeAmount < 1.0f) FadeAmount = Math.Min(1.0f, FadeAmount + _fadeSpeed * dt);

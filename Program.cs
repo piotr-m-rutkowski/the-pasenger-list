@@ -55,16 +55,20 @@ if (Raylib.IsKeyPressed(KeyboardKey.Escape))
     {
         currentGameState = GameState.Menu;
     }
-}
-    
+}    
     if (Raylib.IsKeyPressed(KeyboardKey.F11)) { Raylib.ToggleFullscreen(); }
 
-    // --- 2. UPDATE LOGIC BASED ON STATE ---
+
+
+// --- 2. UPDATE LOGIC BASED ON STATE ---
     switch (currentGameState)
     {
-case GameState.Menu:
+case GameState.Menu: 
+    story.PauseNarration();
+    //story.StopNarration();
     audio.StopAmbient();
     audio.StopNarration(); // Stop any leftover narration    
+    // ADD AMBIENT MUSIC HERE
     Rectangle startButton = new Rectangle(vW / 2 - 150, vH / 2, 300, 80);
     Rectangle quitButton = new Rectangle(vW / 2 - 150, vH / 2 + 100, 300, 80);
 
@@ -78,6 +82,7 @@ case GameState.Menu:
         if (Raylib.IsMouseButtonPressed(MouseButton.Left))
         {
             currentGameState = GameState.Playing;
+            story.ResumeNarration();
         }
     } 
     // --- QUIT BUTTON LOGIC ---
